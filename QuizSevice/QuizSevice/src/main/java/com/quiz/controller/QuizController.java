@@ -15,6 +15,10 @@ public class QuizController {
     @Autowired
     QuizeServices quizeServices;
 
+    public QuizController(QuizeServices quizeServices) {
+        this.quizeServices = quizeServices;
+    }
+
     @PostMapping("/add")
    public Quiz add(@RequestBody Quiz quiz){
         return quizeServices.add(quiz);

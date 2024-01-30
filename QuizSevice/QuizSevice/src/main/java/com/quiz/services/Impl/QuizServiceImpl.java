@@ -2,18 +2,25 @@ package com.quiz.services.Impl;
 
 import com.quiz.entities.Quiz;
 import com.quiz.repository.QuizRepository;
+import com.quiz.services.QuestionClient;
 import com.quiz.services.QuizeServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuizServiceImpl implements QuizeServices {
 
     @Autowired
     QuizRepository quizRepository;
+    QuestionClient questionClient;
 
+    public QuizServiceImpl(QuizRepository quizRepository, QuestionClient questionClient) {
+        this.quizRepository = quizRepository;
+        this.questionClient = questionClient;
+    }
 
     @Override
     public Quiz add(Quiz quiz) {
@@ -22,11 +29,20 @@ public class QuizServiceImpl implements QuizeServices {
 
     @Override
     public List<Quiz> get() {
-        return quizRepository.findAll();
+     List<Quiz> quizzes = quizRepository.findAll();
+
+    List<Quiz> newQuizList = quizzes.stream().map((quiz) ->{quiz.setQuestion(questionClient.getQuestionOfQuiz(quiz.getId()));
+            return  quiz;
+     }).collect(Collectors.toList());
+        return newQuizList;
     }
 
     @Override
     public Quiz get(long id) {
-        return quizRepository.findById(id).orElseThrow(() -> new RuntimeException( "quiz not found"));
+        Quiz quiz = quizRepository.findById(id).orElseThrow(() -> new RuntimeException( "quiz not found"));
+            quiz.setQuestion(questionClient.getQuestionOfQuiz(quiz.getId()));
+        return quiz;
+
+
     }
 }

@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -17,4 +19,6 @@ public class Quiz {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
    private String title;
+
+  transient private List<Question> question;
 }
