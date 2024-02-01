@@ -15,6 +15,7 @@ public class QuizServiceImpl implements QuizeServices {
 
     @Autowired
     QuizRepository quizRepository;
+    @Autowired
     QuestionClient questionClient;
 
     public QuizServiceImpl(QuizRepository quizRepository, QuestionClient questionClient) {
